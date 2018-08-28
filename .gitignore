@@ -1,0 +1,12 @@
+/.idea
+/logs
+/*.iml
+/*.log
+/*/.idea
+/*/logs
+/*/*.iml
+/*/*.log
+/*/target
+/flumeConf
+/src
+/out
