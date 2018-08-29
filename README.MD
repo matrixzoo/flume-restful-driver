@@ -27,7 +27,7 @@ These are RESTful interface in TaskController.java:
 ```
 {
     "agentName": "agent1",
-    "interceptor": []
+    "interceptor": {}
     "channels": [
         {
             "channel": {
@@ -177,7 +177,7 @@ Couple of sinks is useful for some high-efficiency consuming systems.
 `["agent1","agent2"]`
  
  * /job/stop  
- Method:Get  
+ Method:Delete  
  Param:agentName  
  This will stop the job which are named ${agentName}
 
