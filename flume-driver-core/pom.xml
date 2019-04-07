@@ -6,10 +6,10 @@
 
     <groupId>com.matrixzoo</groupId>
     <artifactId>flume-driver-core</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
 
     <properties>
-        <flume-ng.version>1.8.0</flume-ng.version>
+        <flume-ng.version>1.9.0</flume-ng.version>
     </properties>
     <dependencies>
         <dependency>

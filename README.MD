@@ -1,7 +1,11 @@
 # Flume RESTful Driver
 This project is an improvement driver for Apache Flume 1.8.
 It provides a very simple way by using RESTful style to control
-and monitor collection jobs.
+and monitor collection jobs.    
+* 2019.04.07 update to 0.0.2-SNAPSHOT 
+    1. update to flume-ng 1.9.
+    2. provide a monitor to look after the status of agents.
+    3. add the http security module from spring boot
 ## 
 As you know, Apache Flume is a distributed, reliable, and available service for 
 efficiently collecting, aggregating, and moving large amounts of log data.      
@@ -27,7 +31,7 @@ These are RESTful interface in TaskController.java:
 ```
 {
     "agentName": "agent1",
-    "interceptor": {}
+    "interceptor": {}，
     "channels": [
         {
             "channel": {
@@ -39,7 +43,7 @@ These are RESTful interface in TaskController.java:
             "sinks": [
                 {
                     "nameSpace": "sink1",
-                    "sink.directory": "D:\opt\output",
+                    "sink.directory": "D:\pagefile\opt\output",
                     "type": "org.apache.flume.sink.RollingFileSink"
                 }
             ]
@@ -47,7 +51,7 @@ These are RESTful interface in TaskController.java:
     ],
     "source": {
         "nameSpace": "sr1",
-        "spoolDir": "D:\opt\storm-topology",
+        "spoolDir": "D:\pagefile\opt\insert",
         "type": "spooldir"
     }
 }
@@ -93,7 +97,70 @@ Trees are like this:
 ```
 The reason is simple: Multiple source for one channel seems not effective for
 most of the time. And if you wanna two copies, two channels are needed by them.
-Couple of sinks is useful for some high-efficiency consuming systems.       
+Couple of sinks is useful for some high-efficiency consuming systems.   
+* /jobs/list    
+ Method:Get
+ ```
+ [
+     {  
+         "agentName": "agent1", 
+         "counterInfos": {  
+             "CHANNEL.ch1": {   
+                 "ChannelCapacity": "1000000",  
+                 "ChannelFillPercentage": "0.0",    
+                 "ChannelSize": "0",    
+                 "CheckpointBackupWriteErrorCount": "0",    
+                 "CheckpointWriteErrorCount": "0",  
+                 "Closed": "0", 
+                 "EventPutAttemptCount": "0",   
+                 "EventPutErrorCount": "0", 
+                 "EventPutSuccessCount": "0",   
+                 "EventTakeAttemptCount": "3",  
+                 "EventTakeErrorCount": "0",    
+                 "EventTakeSuccessCount": "0",  
+                 "Open": "true",    
+                 "StartTime": "1554636025722",  
+                 "StopTime": "0",   
+                 "Type": "CHANNEL", 
+                 "Unhealthy": "0"   
+             }, 
+             "SINK.sink1": {    
+                 "BatchCompleteCount": "0", 
+                 "BatchEmptyCount": "0",    
+                 "BatchUnderflowCount": "0",    
+                 "ChannelReadFail": "0",    
+                 "ConnectionClosedCount": "0",  
+                 "ConnectionCreatedCount": "1", 
+                 "ConnectionFailedCount": "0",  
+                 "EventDrainAttemptCount": "0", 
+                 "EventDrainSuccessCount": "0", 
+                 "EventWriteFail": "0", 
+                 "StartTime": "1554636026223",  
+                 "StopTime": "0",   
+                 "Type": "SINK" 
+             }, 
+             "SOURCE.sr1": {    
+                 "AppendAcceptedCount": "0",    
+                 "AppendBatchAcceptedCount": "0",   
+                 "AppendBatchReceivedCount": "0",   
+                 "AppendReceivedCount": "0",    
+                 "ChannelWriteFail": "0",   
+                 "EventAcceptedCount": "0", 
+                 "EventReadFail": "0",  
+                 "EventReceivedCount": "0", 
+                 "GenericProcessingFail": "0",  
+                 "OpenConnectionCount": "0",    
+                 "StartTime": "1554636026243",  
+                 "StopTime": "0",   
+                 "Type": "SOURCE"   
+             }  
+         }, 
+         "execState": "RUNNING" 
+     }  
+ ]       
+ ```
+   This request will return all the status of agents.
+ 
 * /job/infos  
  Method:Get  
  Param:agentName  
@@ -112,61 +179,66 @@ Couple of sinks is useful for some high-efficiency consuming systems.
             "sinks": [
                 {
                     "nameSpace": "sink1",
-                    "sink.directory": "D:\opt\output",
+                    "sink.directory": "D:\pagefile\opt\output",
                     "type": "org.apache.flume.sink.RollingFileSink"
                 }
             ]
         }
     ],
     "lifeCycleCounters": {
-        "CHANNEL.agent1_ch1": {
+        "CHANNEL.ch1": {
             "ChannelCapacity": "1000000",
             "ChannelFillPercentage": "0.0",
             "ChannelSize": "0",
             "CheckpointBackupWriteErrorCount": "0",
             "CheckpointWriteErrorCount": "0",
             "Closed": "0",
-            "EventPutAttemptCount": "40",
+            "EventPutAttemptCount": "0",
             "EventPutErrorCount": "0",
-            "EventPutSuccessCount": "40",
-            "EventTakeAttemptCount": "48",
+            "EventPutSuccessCount": "0",
+            "EventTakeAttemptCount": "58",
             "EventTakeErrorCount": "0",
-            "EventTakeSuccessCount": "40",
+            "EventTakeSuccessCount": "0",
             "Open": "true",
-            "StartTime": "1535468366181",
+            "StartTime": "1554636025722",
             "StopTime": "0",
             "Type": "CHANNEL",
             "Unhealthy": "0"
         },
-        "SINK.agent1_sink1": {
+        "SINK.sink1": {
             "BatchCompleteCount": "0",
             "BatchEmptyCount": "0",
             "BatchUnderflowCount": "0",
-            "ConnectionClosedCount": "0",
-            "ConnectionCreatedCount": "1",
+            "ChannelReadFail": "0",
+            "ConnectionClosedCount": "9",
+            "ConnectionCreatedCount": "10",
             "ConnectionFailedCount": "0",
-            "EventDrainAttemptCount": "40",
-            "EventDrainSuccessCount": "40",
-            "StartTime": "1535468366597",
+            "EventDrainAttemptCount": "0",
+            "EventDrainSuccessCount": "0",
+            "EventWriteFail": "0",
+            "StartTime": "1554636026223",
             "StopTime": "0",
             "Type": "SINK"
         },
-        "SOURCE.agent1_sr1": {
+        "SOURCE.sr1": {
             "AppendAcceptedCount": "0",
-            "AppendBatchAcceptedCount": "2",
-            "AppendBatchReceivedCount": "2",
+            "AppendBatchAcceptedCount": "0",
+            "AppendBatchReceivedCount": "0",
             "AppendReceivedCount": "0",
-            "EventAcceptedCount": "40",
-            "EventReceivedCount": "40",
+            "ChannelWriteFail": "0",
+            "EventAcceptedCount": "0",
+            "EventReadFail": "0",
+            "EventReceivedCount": "0",
+            "GenericProcessingFail": "0",
             "OpenConnectionCount": "0",
-            "StartTime": "1535468366607",
+            "StartTime": "1554636026243",
             "StopTime": "0",
             "Type": "SOURCE"
         }
     },
     "source": {
         "nameSpace": "sr1",
-        "spoolDir": "D:\opt\storm-topology",
+        "spoolDir": "D:\pagefile\opt\insert",
         "type": "spooldir"
     }
 }
@@ -180,7 +252,9 @@ Couple of sinks is useful for some high-efficiency consuming systems.
  Method:Delete  
  Param:agentName  
  This will stop the job which are named ${agentName}
-
+ * /jobs/clean  
+ Method:Delete  
+ This method will stop and clean the information of jobs(agents) which were failed.(To release the memories of H2 Database embedded)    
 ## Compiling Environment
 
 Compiling our RESTful Driver requires the following tools:

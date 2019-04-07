@@ -10,22 +10,16 @@ import java.util.List;
 @RestController
 public class TaskController {
 
-    @Autowired
     private TaskService taskService;
+
+    @Autowired
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @PostMapping("/job/register")
     public void registerJob(@RequestBody JobPorperties jobPorperties) throws Exception {
         taskService.registerJob(jobPorperties);
-    }
-
-    @GetMapping("/job/infos")
-    public JobPorperties getJobInfos(@RequestParam(value = "agentName") String agentName) throws Exception {
-        return taskService.getJobInfos(agentName);
-    }
-
-    @GetMapping("/job/agents")
-    public List<String> getAgentNames() throws Exception {
-        return taskService.getAgentNames();
     }
 
     @DeleteMapping("/job/stop")

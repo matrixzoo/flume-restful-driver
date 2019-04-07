@@ -3,6 +3,7 @@ package com.matrixzoo.flume.service.impl;
 import com.matrixzoo.flume.FlumeJobRunner;
 import com.matrixzoo.flume.entity.JobPorperties;
 import com.matrixzoo.flume.service.TaskService;
+import com.matrixzoo.flume.utils.ScheduledMonitor;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flume.instrumentation.util.JMXPollUtil;
 import org.springframework.context.support.StaticApplicationContext;
@@ -15,7 +16,7 @@ import java.util.Map;
 
 @Service
 public class TaskServiceImpl implements TaskService {
-    private StaticApplicationContext staticApplicationContext = new StaticApplicationContext();
+    private StaticApplicationContext staticApplicationContext = ScheduledMonitor.getStaticApplicationContext();
 
     @Override
     public void registerJob(JobPorperties jobPorperties) throws Exception {
